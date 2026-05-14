@@ -1,0 +1,22 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches: [ main ] # 监听的分支，如果是 master 请改成 master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 必须设置为 0，才能拉取完整的 git 历史记录用于推送
+
+      - name: Mirror to Gitee
+        uses: wearerequired/git-mirror-action@v1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }} # 如果需要用 SSH，这里填私钥
+        with:
+          # 你的 Gitee 仓库 URL
+          target-repo-url: 'https://gitee.com/yang-chen999/NPU-Cryptography-Experiments.git'
